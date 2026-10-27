@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Stored XSS Security Lab</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="container">
+
+        <header class="header">
+            {% if mode == "vulnerable" %}
+                <span class="badge badge-vulnerable">
+                    Vulnerable Demo
+                </span>
+                <h1>Stored XSS Lab</h1>
+                <p>Educational demonstration of unsafe HTML rendering.</p>
+            {% else %}
+                <span class="badge badge-secure">
+                    Secured Demo
+                </span>
+                <h1>Protected Feedback Board</h1>
+                <p>Comments are displayed using automatic HTML escaping.</p>
+            {% endif %}
+
+            <nav class="nav">
+                <a href="/">Home</a>
+                <a href="/vulnerable">Vulnerable demo</a>
+                <a href="/secure">Secured demo</a>
+            </nav>
+        </header>
+
+        <section class="card">
+            <h2>Leave a comment</h2>
+
+            <form class="comment-form"
+                  action="{{ url_for('submit') }}"
+                  method="POST">
+
+                <label for="message">Your message</label>
+
+                <input
+                    type="text"
+                    id="message"
+                    name="message"
+                    maxlength="500"
+                    placeholder="Write your feedback here..."
+                    required
+                >
+
+                <input type="hidden"
+                       name="return_to"
+                       value="{{ mode }}">
+
+                <button type="submit">Save comment</button>
+            </form>
+        </section>
+
+        <section class="card">
+            <h2>Saved comments</h2>
+
+            <ul class="comment-list">
+                {% for comment in comments %}
+                    <li class="comment-item">
+                        {% if mode == "vulnerable" %}
+                            {{ comment["message"] | safe }}
+                        {% else %}
+                            {{ comment["message"] }}
+                        {% endif %}
+                    </li>
+                {% else %}
+                    <li class="empty-state">
+                        No comments yet. Be the first to leave feedback.
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <footer class="footer">
+            Stored XSS Security Lab · Python · Flask · SQLite
+        </footer>
+
+    </main>
+</body>
+</html>

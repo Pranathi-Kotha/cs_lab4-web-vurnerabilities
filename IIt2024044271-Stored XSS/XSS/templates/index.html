@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Stored XSS Security Lab</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="home-body">
+
+    <!-- Navigation -->
+    <nav class="home-nav">
+        <a class="home-logo" href="/">🛡 XSS LAB</a>
+
+        <div class="home-nav-links">
+            <a href="/">Home</a>
+            <a href="/vulnerable">Vulnerable Demo</a>
+            <a href="/secure">Secure Demo</a>
+        </div>
+    </nav>
+
+    <!-- Main Hero Section -->
+    <header class="home-hero">
+
+        <div class="home-hero-content">
+            <span class="home-eyebrow">
+                WEB APPLICATION SECURITY · PROJECT
+            </span>
+
+            <h1>
+                Stored XSS<br>
+                <span>Security Lab</span>
+            </h1>
+
+            <p>
+                Discover how unsafe user input can become a security risk.
+                Compare a vulnerable implementation with a secure,
+                output-escaped version in this interactive educational lab.
+            </p>
+
+            <div class="home-actions">
+                <a class="home-button home-button-primary"
+                   href="/secure">
+                    Explore Secure Demo →
+                </a>
+
+                <a class="home-button home-button-secondary"
+                   href="/vulnerable">
+                    View Vulnerable Demo
+                </a>
+            </div>
+
+            <div class="home-tags">
+                <span>● Flask</span>
+                <span>● Python</span>
+                <span>● SQLite</span>
+                <span>● Web Security</span>
+            </div>
+        </div>
+
+        <!-- Code Preview -->
+        <div class="home-hero-visual">
+
+            <div class="code-window">
+
+                <div class="code-window-top">
+                    <span>●</span>
+                    <span>●</span>
+                    <span>●</span>
+                    <small>security_demo.py</small>
+                </div>
+
+                <div class="code-content">
+                    <p>
+                        <span class="code-purple">def</span>
+                        render_comment(input):
+                    </p>
+
+                    <p class="code-indent">
+                        <span class="code-muted"># Unsafe output</span>
+                    </p>
+
+                    <p class="code-indent">
+                        render(<span class="code-red">input</span>)
+                    </p>
+
+                    <br>
+
+                    <p class="code-indent">
+                        <span class="code-muted"># Safer output</span>
+                    </p>
+
+                    <p class="code-indent">
+                        render(<span class="code-green">escaped_input</span>)
+                    </p>
+
+                    <div class="code-status">
+                        ✓ Compare. Understand. Protect.
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="visual-badge">
+                🛡 Output escaping matters
+            </div>
+
+        </div>
+
+    </header>
+
+    <!-- Footer -->
+    <footer class="home-footer">
+        <span>🛡 Stored XSS Security Lab</span>
+        <span>Built for learning web application security</span>
+    </footer>
+
+</body>
+</html>
