@@ -8,9 +8,9 @@
 | Member Name | Roll Number | Category | Variant Implemented |
 |---|---|---|---|
 | Pranathi Kotha | IIB2024044 | Cross-Site Scripting (XSS) | Reflected XSS |
-| TODO | IIT2024270 | OS Command Injection | In-band Command Injection |
-| TODO | TODO | TODO | TODO |
-| TODO | TODO | TODO | TODO |
+| Ramkumar | IIT2024270 | OS Command Injection | In-band Command Injection |
+| Baby Bhavya | IIT2024271 | TODO | TODO |
+| Shravani Math | IIT2024216 | TODO | TODO |
 
 ## Project Overview
 
