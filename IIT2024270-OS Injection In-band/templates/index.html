@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberGuard | Security Lab</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="topbar">
+    <div class="brand">
+        <div class="logo">⌘</div>
+        <div>CYBERGUARD <span style="color:#51d9f5">/ LAB</span></div>
+    </div>
+    <div class="local-tag">● LOCAL ENVIRONMENT</div>
+</header>
+
+<main>
+    <div class="eyebrow">Application security · Practical assessment</div>
+    <h1>Command Injection <span>Lab.</span></h1>
+    <p class="subtitle">
+        Explore unsafe shell execution in a controlled lab and compare
+        it with a safer implementation.
+    </p>
+
+    <section class="stats">
+        <div class="stat">
+            <div class="stat-label">Vulnerability class</div>
+            <div class="stat-value">OS Command Injection</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Variant</div>
+            <div class="stat-value">In-band execution</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Scope</div>
+            <div class="stat-value" style="color:#48e0a4">Local lab only</div>
+        </div>
+    </section>
+
+    <section class="layout">
+        <div class="panel">
+            <div class="panel-heading">
+                <h2>Diagnostic Console</h2>
+                <span class="small-label">TEST MODULE 01</span>
+            </div>
+
+            <form method="post">
+                <div class="field">
+                    <label for="mode">Execution profile</label>
+                    <select name="mode" id="mode">
+                        <option value="vulnerable"
+                            {{ 'selected' if mode == 'vulnerable' else '' }}>
+                            Vulnerable — Demonstration
+                        </option>
+                        <option value="secure"
+                            {{ 'selected' if mode == 'secure' else '' }}>
+                            Secured — Mitigation
+                        </option>
+                    </select>
+                    <div class="hint">
+                        Compare the vulnerable and secured code paths.
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="host">Hostname input</label>
+                    <input id="host" name="host" value="{{ host }}"
+                           placeholder="127.0.0.1" required>
+                    <div class="hint">
+                        Use only the approved local coursework test inputs.
+                    </div>
+                </div>
+
+                <button type="submit">▶ &nbsp; Run Diagnostic</button>
+            </form>
+
+            <div class="result">
+                <div class="terminal-head">
+                    <span>DIAGNOSTIC OUTPUT</span>
+                    <span>LOCAL CONSOLE</span>
+                </div>
+                <pre>{% if output is not none %}{{ output }}{% else %}Ready.
+Select a profile and run a local diagnostic.
+Results will appear here.{% endif %}</pre>
+            </div>
+        </div>
+
+        <aside>
+            <div class="info-card">
+                <span class="tag tag-cyan">01 / ROOT CAUSE</span>
+                <h3>Unsafe command construction</h3>
+                <p>
+                    Concatenating untrusted input into a shell command
+                    can let shell metacharacters change its interpretation.
+                </p>
+            </div>
+
+            <div class="info-card">
+                <span class="tag tag-green">02 / MITIGATION</span>
+                <h3>Validate and execute safely</h3>
+                <ul>
+                    <li>Validate hostname characters.</li>
+                    <li>Pass executable arguments as a list.</li>
+                    <li>Disable shell interpretation.</li>
+                    <li>Apply least privilege.</li>
+                </ul>
+            </div>
+
+            <div class="info-card">
+                <span class="tag tag-cyan">03 / TEST OBJECTIVE</span>
+                <h3>Compare both outcomes</h3>
+                <p>
+                    Verify the controlled vulnerability demonstration
+                    and confirm that the secured path rejects the same input.
+                </p>
+            </div>
+        </aside>
+    </section>
+
+    <footer class="footer">
+        <span>CYBERGUARD LAB · EDUCATIONAL USE ONLY</span>
+        <span>Do not expose vulnerable mode to external networks.</span>
+    </footer>
+</main>
+</body>
+</html>
