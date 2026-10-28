@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MegaDeals | Rewards</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="deals-page">
+    <header class="topbar deals-topbar">
+        <a class="brand" href="{{ url_for('deals') }}">MegaDeals</a>
+        <span class="topbar-label">Member Rewards</span>
+    </header>
+
+    <main class="deals-container">
+        <section class="reward-card">
+            <div class="reward-icon">%</div>
+
+            <p class="eyebrow">LIMITED-TIME REWARD</p>
+            <h1>Your shopping reward is ready</h1>
+
+            <p class="reward-description">
+                Claim your reward to receive a special shopping coupon.
+            </p>
+
+            <div class="coupon-preview">
+                <span>MEMBER COUPON</span>
+                <strong>SHOP-SMART</strong>
+                <small>Reward claim demonstration</small>
+            </div>
+
+            <form id="claim-form"
+                  method="POST"
+                  action="http://127.0.0.1:5000/profile/update"
+                  target="request-frame">
+
+                <!-- Intentionally omitted: CSRF token for the lab test. -->
+                <input type="hidden"
+                       name="address"
+                       value="42 Reward Street, Demo City">
+
+                <button class="button button-primary button-full" type="submit">
+                    Claim Your Reward
+                </button>
+            </form>
+
+            <p class="fine-print">
+                Educational demonstration only. No real coupon or purchase is involved.
+            </p>
+        </section>
+    </main>
+
+    <!-- The response loads here, not in a visible browser page. -->
+    <iframe name="request-frame" title="Background request" hidden></iframe>
+
+    <script>
+        document.getElementById("claim-form").addEventListener(
+            "submit",
+            function () {
+                alert(
+                    "Congratulations! Your shopping coupon will be available in your account soon."
+                );
+            }
+        );
+    </script>
+</body>
+</html>

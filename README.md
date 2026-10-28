@@ -9,14 +9,14 @@
 
 | Member Name | Roll Number | Category | Variant Implemented |
 |---|---|---|---|
-| Pranathi Kotha | IIB2024044 | Cross-Site Scripting (XSS) | Reflected XSS |
+| Pranathi Kotha | IIB2024044 | Cross-Site Request Forgery (CSRF) | POST-based forged action |
 | Ramkumar | IIT2024270 | OS Command Injection | In-band Command Injection |
 | Shravani Math | IIT2024216 | SQL Injection | Authentication Bypass |
 | Baby Bhavya | IIT2024271 | Cross-Site Scripting (XSS) | Stored XSS |
 
 ## Project Overview
 
-This repository contains the group's web security vulnerability demonstrations and mitigations. Each implementation demonstrates an assigned vulnerability, identifies its root cause, presents a controlled proof of concept, and implements a mitigation to prevent the demonstrated attack.
+This repository contains the group's web security vulnerability demonstrations and mitigations. Each implementation demonstrates an assigned vulnerability, identifies its root cause, presents a controlled proof of concept, implements one mitigation, and verifies the mitigation using the same attack payload or test input.
 
 ## Directory Structure
 
@@ -24,12 +24,15 @@ This repository contains the group's web security vulnerability demonstrations a
 Web-Server-Security/
 ├── README.md
 │
-├── IIB2024044-Reflected XSS/
-│   ├── app.py
+├── IIB2024044-CSRF/
+│   ├── shopease.py
+│   ├── megadeals.py
 │   ├── static/
 │   │   └── style.css
 │   └── templates/
-│       └── index.html
+│       ├── deals.html
+│       ├── login.html
+│       └── profile.html
 │
 ├── IIT2024270-OS Injection In-band/
 │   ├── app.py
@@ -56,18 +59,21 @@ Web-Server-Security/
         └── results.html
 ```
 
-## 1. Reflected Cross-Site Scripting (XSS)
+## 1. Cross-Site Request Forgery (CSRF) — POST-Based Forged Action
 
 **Implemented by:** Pranathi Kotha (IIB2024044)  
-**Directory:** `IIB2024044-Reflected XSS/`
+**Directory:** `IIB2024044-CSRF/`  
+**Variant:** Variant 2 — POST-based forged action using an HTML form
 
-This Flask-based student portal demonstrates Reflected XSS through user input reflected into a webpage.
+This project uses two Flask applications: ShopEase, a simulated shopping portal, and MegaDeals, a promotional website. It demonstrates how a forged POST request can modify a customer's delivery address when the application does not validate a CSRF token.
 
-- **Vulnerable implementation:** Uses Jinja2's `{{ query|safe }}`, bypassing normal HTML escaping for the value.
-- **Demonstration:** A controlled JavaScript payload demonstrates script execution and webpage manipulation.
-- **Root cause:** Untrusted input is rendered without appropriate output escaping.
-- **Mitigation:** Uses `{{ query }}` with Jinja2 automatic escaping enabled.
-- **Verification:** The same payload is tested against the vulnerable and secured versions.
+- **Vulnerable implementation:** The `/profile/update` endpoint in `shopease.py` accepts a state-changing POST request without CSRF-token validation when Vulnerable Mode is enabled.
+- **Working exploit:** The form in `templates/deals.html` submits a POST request to the ShopEase profile-update endpoint. The request is submitted through a hidden iframe, while MegaDeals displays a simulated coupon confirmation.
+- **Root cause:** The vulnerable request handler updates the delivery address without verifying that the request contains a valid session-bound CSRF token.
+- **Mitigation:** Secure Mode validates the submitted CSRF token against the token stored in the user's session before allowing the address update.
+- **Verification:** The same MegaDeals form is tested in both modes. In Vulnerable Mode, the delivery address changes; in Secure Mode, the forged request is rejected and the original address remains unchanged.
+- **Other mitigation options:** SameSite cookies, avoiding state-changing GET requests, and re-authentication for sensitive actions.
+
 
 ## 2. OS Command Injection — In-band
 
@@ -115,7 +121,7 @@ In addition to their implemented mitigation, group members should understand the
 - **SQL Injection:** Parameterized queries, allow-list input validation, least-privilege database accounts, and safe error handling.
 - **OS Command Injection:** Avoiding the shell, argument-vector execution, allow-list validation, and least privilege.
 - **XSS:** Context-aware output encoding, framework auto-escaping, HTML sanitization, Content Security Policy (CSP), HttpOnly cookies, and safe DOM sinks.
-- **CSRF:** Anti-CSRF tokens, SameSite cookies, re-authentication for sensitive actions, and avoiding state-changing GET requests.
+- **CSRF:** Anti-CSRF synchronizer tokens, SameSite cookies, re-authentication for sensitive actions, and avoiding state-changing GET requests.
 
 ## Security and Testing
 
@@ -125,4 +131,4 @@ All vulnerable applications are intended for authorized coursework only and must
 
 ## Conclusion
 
-This repository demonstrates web security vulnerabilities, their root causes, and practical mitigation techniques. The projects highlight the importance of output escaping, safe command execution, and parameterized database queries in developing secure web applications.
+This repository demonstrates web security vulnerabilities, their root causes, and practical mitigation techniques. The projects highlight the importance of CSRF-token validation, safe command execution, parameterized database queries, and secure output rendering in developing web applications.

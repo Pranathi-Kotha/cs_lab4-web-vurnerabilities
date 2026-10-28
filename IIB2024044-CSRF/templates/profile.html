@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | ShopEase</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="{{ url_for('profile') }}">ShopEase</a>
+        <span class="topbar-label">My Account</span>
+
+        <form method="POST" action="{{ url_for('logout') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="button button-light" type="submit">Log out</button>
+        </form>
+    </header>
+
+    <main class="container">
+        <section class="page-heading">
+            <div>
+                <p class="eyebrow">ACCOUNT DASHBOARD</p>
+                <h1>My Profile</h1>
+                <p class="muted">Manage your personal and delivery information.</p>
+            </div>
+
+            <span class="mode-pill {{ 'secure' if mode == 'secure' else 'vulnerable' }}">
+                {{ 'Secure Mode' if mode == 'secure' else 'Vulnerable Mode' }}
+            </span>
+        </section>
+
+        <section class="notice">
+            <strong>CSRF lab:</strong>
+            {% if mode == 'secure' %}
+                Profile changes require a valid session-bound CSRF token.
+            {% else %}
+                Profile changes do not validate a CSRF token in this mode.
+            {% endif %}
+        </section>
+
+        <section class="panel">
+            <h2>Personal information</h2>
+            <p class="muted">Your current details stored by ShopEase.</p>
+
+            <div class="profile-grid">
+                <div class="detail">
+                    <span>Full name</span>
+                    <strong>{{ customer.name }}</strong>
+                </div>
+                <div class="detail">
+                    <span>Email address</span>
+                    <strong>{{ customer.email }}</strong>
+                </div>
+                <div class="detail">
+                    <span>Phone number</span>
+                    <strong>{{ customer.phone }}</strong>
+                </div>
+                <div class="detail">
+                    <span>Delivery address</span>
+                    <strong>{{ customer.address }}</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Update delivery address</h2>
+            <p class="muted">Use this form to test a legitimate profile update.</p>
+
+            <form method="POST" action="{{ url_for('update_profile') }}"
+                  class="form-stack">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <label for="address">New delivery address</label>
+                <input id="address" name="address" type="text"
+                       maxlength="200" value="{{ customer.address }}" required>
+
+                <button class="button button-primary" type="submit">
+                    Save address
+                </button>
+            </form>
+        </section>
+
+        <section class="panel">
+            <h2>Demo controls</h2>
+            <p class="muted">
+                Choose a protection mode and reset the profile between tests.
+            </p>
+
+            <div class="action-row">
+                <form method="POST"
+                      action="{{ url_for('set_mode', mode_name='vulnerable') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="button {{ 'button-primary' if mode == 'vulnerable' else 'button-outline' }}"
+                            type="submit">
+                        Vulnerable Mode
+                    </button>
+                </form>
+
+                <form method="POST"
+                      action="{{ url_for('set_mode', mode_name='secure') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="button {{ 'button-primary' if mode == 'secure' else 'button-outline' }}"
+                            type="submit">
+                        Secure Mode
+                    </button>
+                </form>
+
+                <form method="POST" action="{{ url_for('reset_demo') }}"
+                      onsubmit="return confirm('Restore the original demo profile?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="button button-outline" type="submit">
+                        Reset Demo
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <p class="footer-note">
+            Educational demonstration only. All profile details are fictional.
+        </p>
+    </main>
+</body>
+</html>
